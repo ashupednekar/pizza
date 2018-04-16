@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .forms import orderForm
+from .models import OrderHist
+
+order = OrderHist()
 
 
 def rendrer(request):
@@ -10,12 +13,12 @@ def rendrer(request):
         form = orderForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
-            pizza = form.cleaned_data['pizza']
-            name = form.cleaned_data['name']
-            address = form.cleaned_data['address']
-            phone = form.cleaned_data['phone']
-
-            return render(request, 'success.html', {'pizza':pizza, 'name':name, 'address':address, 'phone':phone})
+            order.pizza = form.cleaned_data['pizza']
+            order.name = form.cleaned_data['name']
+            order.address = form.cleaned_data['address']
+            order.phone = form.cleaned_data['phone']
+            order.save()
+            return render(request, 'success.html', {'pizza':order.pizza, 'name':order.name, 'address':order.address, 'phone':order.phone})
             
     # if a GET (or any other method) we'll create a blank form
     else:
